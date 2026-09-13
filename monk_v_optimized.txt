@@ -1,0 +1,100 @@
+Option Explicit
+
+' 用法（关键）：
+' 1) 在按键精灵中将本脚本设置为【热键脚本】
+' 2) 热键绑定 V（86）
+' 3) 触发方式选【按住有效】
+' 4) 勾选【屏蔽原键】
+' 这样按住V时，只执行本脚本内容，V本身不会传给游戏（不会执行原键释放）。
+
+Private Declare Function GetAsyncKeyState Lib "user32" (ByVal vKey As Long) As Integer
+
+SetSimMode 2
+
+Sub CastOnce()
+    KeyPress "Num 4", 1
+
+    ' 反弹
+    IfColor 86,173, "1A37A6", 2 Then
+        IfColor 1281,1247, "B2E6DE", 2 Then
+            KeyPress "7", 2
+        End If
+    End If
+
+    ' 8cd+在守缺8尺内+有增益
+    IfColor 748,1117, "98B6BD", 2 Then
+        IfColor 1006,1251, "4AD9DE", 2 Then
+            IfColor 848,1167, "BCDEDE", 2 Then
+                KeyPress "8", 5
+            End If
+
+            ' 5、6尺才打
+            IfColor 1263,657, "00FFFF", 2 Then
+                KeyPress "8", 5
+            End If
+        End If
+    End If
+
+    ' 4尺（动态）+4触发
+    IfColor 1173,1187, "AFDFDD", 2 Then
+        IfColor 1063,1308, "3DA5C9", 2 Then
+            KeyPress "4", 3
+        Else
+            ' 8cd
+            IfColor 748,1117, "98B6BD", 2 Then
+                KeyPress "8", 3
+            Else
+                KeyPress "5", 2
+                KeyPress "2", 1
+            End If
+        End If
+    Else
+        KeyPress "6", 2
+        KeyPress "3", 1
+        Delay 10
+    End If
+
+    ' 8尺+进战+别连点
+    IfColor 1009,1253, "8CD7D7", 2 Then
+        IfColor 89,149, "3252B2", 2 Then
+            IfColor 848,1175, "5D6F6D", 2 Then
+                KeyPress "`", 1
+            End If
+        End If
+    End If
+
+    IfColor 813,1298, "3E696E", 2 Then
+        KeyPress "F2", 1
+    End If
+
+    ' 监控F4免得一直按+近战
+    IfColor 809,1115, "839DD3", 2 Then
+        ' 切防御准备免控
+        IfColor 910,1260, "40C14", 2 Then
+            KeyPress "F4", 1
+        End If
+
+        IfColor 69,148, "3252B8", 2 Then
+            ' 8尺+无F4免控+无断骨
+            IfColor 1014,1249, "9CDEDE", 2 Then
+                IfColor 805,1167, "32726F", 2 Then
+                    IfColor 714,1294, "6C746F", 2 Then
+                        KeyPress "F4", 1
+                    End If
+                End If
+            End If
+        End If
+    End If
+End Sub
+
+Do
+    If GetAsyncKeyState(86) <> 0 Then
+        ' 按下V后进入持续连发，松开V立即退出
+        Do
+            CastOnce
+            Delay 10
+        Loop While GetAsyncKeyState(86) <> 0
+    End If
+
+    Delay 10
+Loop
